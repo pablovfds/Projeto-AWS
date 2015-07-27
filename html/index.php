@@ -16,99 +16,83 @@
 
 <body>
 <!--  Cabeçalho  -->
+<?php
+//dados de login do rds
+$usuario = "mysql_site"; //digite seu nome de usuario no mysql aqui
+$senha = "12345678"; //digite sua senha de acesso ao mysql aqui
+
+//Conecta com o RDS com host, bdname, user e pass
+$dbh = new PDO('mysql:host=mysql-site.cn7eudsxqztw.eu-west-1.rds.amazonaws.com;dbname=tabela_brasileirao', $usuario, $senha);
+?>
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="page-header">
                 <h1 align = "center"> Times brasileirão 2015 </h1>
             </div>
-
             <!-- tenta conexão com o bd -->
-            <?php
-            $host = "mysql-site.cn7eudsxqztw.eu-west-1.rds.amazonaws.com port=3306"
-		$usuario = "MySQL_site"; //digite seu nome de usuario no mysql aqui
-		$senha = "12345678"; //digite sua senha de acesso ao mysql aqui
-		$conexao = mysql_connect($host,$usuario,$senha) or die ("N&atilde;o foi poss&iacute;vel conectar ao banco de dados");
-		mysql_select_db("tabela_brasileirao") or die("Base de dados n&atilde;o encontrada"); ?>
-
-
-            <!--
-        <?php $conexao = mysql_connect("host= mysql-example.cn7eudsxqztw.eu-west-1.rds.amazonaws.com port=3306 dbname=mysql_site user=mysql_site password=12345678")
-            or die ("<br><div class=\"alert alert-warning\" role=\"alert\">Não foi possivel conectar ao servidor MySQL</div>");
-            ?>
-        <div id="success-alert" class="alert alert-success" role="alert"> Conexão efetuada com sucesso!! </div>
-        -->
-
-
-
             <!--   Combo box para selecionar a liga, carregando do banco de dados os nomes das ligas  -->
             <article>
-                <div class="panel">
-                    <div class="panel-body" align = "center">
-                        <div class="input-group" >
-                            <span class="btn btn-small btn-primary"> Série : </span>
+                <div class='panel'>
+                    <div class='panel-body' align = 'center'>
+                        <div class='input-group' >
+                            <form method="POST">
+                                <span><h3> Série : </h3></span>
+                                <select name="serie_selecionado" method='POST'>
+                                    <?php
+                                    $buscaSerie = $dbh->prepare("SELECT DISTINCT serie FROM Tabela");
+                                    $buscaSerie->execute();
+                                    $linhasSerie = $buscaSerie->fetchall(PDO::FETCH_ASSOC);
 
-                            <select name="liga">
-                                <?php
-                                $result = pg_query("SELECT DISTINCT liga FROM tabela ORDER BY liga;");
-                                if  ($result) {
-                                    while ($row = pg_fetch_array($result)) {
-                                        echo "<option>" . $row["liga"] . "</option>";
+                                    foreach($linhasSerie as $linha) {
+                                        echo "<option>" . $linha["serie"] . "</option>";
                                     }
-                                }
-                                ?>
-                            </select> </p>
-
+                                    ?>
+                                </select>
                         </div>
                         <div align="center" 2class="col-md-3">
                             <input type="submit" class="btn btn-primary" value="Ver tabela" />
                         </div>
+                        </form>
                     </div>
                 </div>
             </article>
 
+            <?php if (isset($_POST["serie_selecionado"]) ? $_POST["serie_selecionado"] : false); ?>
 
-
-            <!-- verifica se alguma liga foi selecionada -->
-            <?php if (isset($_POST['liga']) ? $_POST['liga'] : false): ?>
-
-                <h3 align = "center">Brasileirao <?php echo $_POST['liga']; ?> </h3>
-
-                <table class="table table-striped" align = "center">
-
-                    <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Pontuaçao</th>
-                    </tr>
-                    </thead>
-
-
-                    <tbody >
-
-                    <!-- Conectar com o banco de dados para pegar os times da liga -->
-                    <?php
-                    $result = pg_query("SELECT time FROM tabela WHERE liga = '" . $_POST['liga']"' ORDER BY pontuacao DESC;'");
-                        while ($row = pg_fetch_array($result)) {
-                            echo "<tr><td>". $row.["time"] . "</td><td>". $row.["pontuacao"] . "</td></tr>";
-                        }
+            <h3 align = 'center'>Brasileirao <?php echo $_POST["serie_selecionado"]; ?></h3>
+            <table class= "table table-striped col-md-10" align = "center">
+                <thead>
+                <tr>
+                <tr>
+                    <th>Time</th>
+                    <th>Pontuação</th>
+                <tr>
+                </thead>
+                <tbody>
+                <?php
+                //Faz ums consulta no BD
+                $buscaTimes = $dbh->prepare("SELECT * FROM Tabela WHERE serie='" . $_POST["serie_selecionado"] . "' ORDER BY pontuacao DESC");
+                $buscaTimes->execute();
+                $linhasTimes = $buscaTimes->fetchall(PDO::FETCH_ASSOC);
+                echo "<!--   Combo box para selecionar a liga, carregando do banco de dados os nomes das ligas  -->";
+                echo "<!-- Conectar com o banco de dados para pegar os times da liga -->";
+                foreach($linhasTimes as $linhaTime){
+                    echo "<tr><td>". $linhaTime["time"] . "</td><td>". $linhaTime["pontuacao"] . "</td></tr>";
+                }
                 ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-
 </body>
 
-
-<br><br><br><br><br><br><br><br><br>
+<br><br><br>
 <div id="espaco"></div>
 <div id="footer">
     <div class="container">
-        <p class="muted credit" align="center">Lucas Nascimento Cabral e Páblo Victor Félix - Capacitaçã Huawei - Módulo 3 </p>
+        <p class="muted credit" align="center">Lucas Nascimento Cabral e Páblo Victor Félix dos Santos - Capacitaçã Huawei - Módulo 3 </p>
     </div>
 </div>
 </html>
