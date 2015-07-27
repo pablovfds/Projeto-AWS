@@ -18,10 +18,11 @@
 <!--  Cabeçalho  -->
 <?php
 //dados de login do rds
+
 $usuario = "mysql_site"; //digite seu nome de usuario no mysql aqui
 $senha = "12345678"; //digite sua senha de acesso ao mysql aqui
 
-//Conecta com o RDS com host, bdname, user e pass
+//Conecta com o RDS
 $dbh = new PDO('mysql:host=mysql-site.cn7eudsxqztw.eu-west-1.rds.amazonaws.com;dbname=tabela_brasileirao', $usuario, $senha);
 ?>
 <div class="container">
@@ -31,7 +32,7 @@ $dbh = new PDO('mysql:host=mysql-site.cn7eudsxqztw.eu-west-1.rds.amazonaws.com;d
                 <h1 align = "center"> Times brasileirão 2015 </h1>
             </div>
             <!-- tenta conexão com o bd -->
-            <!--   Combo box para selecionar a liga, carregando do banco de dados os nomes das ligas  -->
+            <!--   Combo box para selecionar as series  -->
             <article>
                 <div class='panel'>
                     <div class='panel-body' align = 'center'>
@@ -71,12 +72,11 @@ $dbh = new PDO('mysql:host=mysql-site.cn7eudsxqztw.eu-west-1.rds.amazonaws.com;d
                 </thead>
                 <tbody>
                 <?php
-                //Faz ums consulta no BD
+                //Consulta os times e as pontuações no BD
                 $buscaTimes = $dbh->prepare("SELECT * FROM Tabela WHERE serie='" . $_POST["serie_selecionado"] . "' ORDER BY pontuacao DESC");
                 $buscaTimes->execute();
                 $linhasTimes = $buscaTimes->fetchall(PDO::FETCH_ASSOC);
-                echo "<!--   Combo box para selecionar a liga, carregando do banco de dados os nomes das ligas  -->";
-                echo "<!-- Conectar com o banco de dados para pegar os times da liga -->";
+                echo "<!-- Conectar com o banco de dados para pegar os times da serie selecionada -->";
                 foreach($linhasTimes as $linhaTime){
                     echo "<tr><td>". $linhaTime["time"] . "</td><td>". $linhaTime["pontuacao"] . "</td></tr>";
                 }
