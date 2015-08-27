@@ -20,7 +20,7 @@
 $user = "equipe4Admin"; //nome de usuario
 $pwd = "senha123*"; //senha de acesso
 //Conecta com o bd
-$dbh = new PDO("sqlsrv:server = tcp:equipe4servidor.database.windows.net,1433; Database = equipe4database", $user, $pwd);
+$dbh = new PDO("sqlsrv:server = equipe4servidor.database.windows.net,1433; Database = equipe4database", $user, $pwd);
 ?>
 <div class="container">
     <div class="row">
@@ -38,11 +38,11 @@ $dbh = new PDO("sqlsrv:server = tcp:equipe4servidor.database.windows.net,1433; D
                                 <span><h3> Série : </h3></span>
                                 <select name="serie_selecionado" method='POST'>
 					<?php
-		                            $buscaSerie = $dbh->prepare("SELECT DISTINCT serie_time FROM equipe4database.db_accessadmin.tabela_brasileirao");
+		                            $buscaSerie = $dbh->prepare("SELECT DISTINCT serie_time FROM db_accessadmin.tabela_brasileirao");
 		                            $buscaSerie->execute();
 		                            $linhasSerie = $buscaSerie->fetchall(PDO::FETCH_ASSOC);
 		                            foreach($linhasSerie as $linha) {
-		                                echo "<option>" . $linha["serie"] . "</option>";
+		                                echo "<option>" . $linha["serie_time"] . "</option>";
 		                            }
 	                                ?>
                                 </select>
