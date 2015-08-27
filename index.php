@@ -16,6 +16,17 @@
 
 <body>
 <!--  Cabeçalho  -->
+<?php
+$user = "equipe4Admin"; //nome de usuario
+$pwd = "senha123*"; //senha de acesso
+//Conecta com o bd
+$dbh = new PDO("sqlsrv:server = tcp:equipe4servidor.database.windows.net,1433; Database = equipe4database", $user, $pwd);
+$dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+catch ( PDOException $e ) {
+    print( "Error connecting to SQL Server." );
+    die(print_r($e));
+}
+?>
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
@@ -31,6 +42,14 @@
                             <form method="POST">
                                 <span><h3> Série : </h3></span>
                                 <select name="serie_selecionado" method='POST'>
+					<?php
+		                            $buscaSerie = $dbh->prepare("SELECT DISTINCT serie_time FROM equipe4database.db_accessadmin.tabela_brasileirao");
+		                            $buscaSerie->execute();
+		                            $linhasSerie = $buscaSerie->fetchall(PDO::FETCH_ASSOC);
+		                            foreach($linhasSerie as $linha) {
+		                                echo "<option>" . $linha["serie"] . "</option>";
+		                            }
+	                                ?>
                                 </select>
                         </div>
                         <div align="center" 2class="col-md-3">
