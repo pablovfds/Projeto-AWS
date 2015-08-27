@@ -21,11 +21,6 @@ $user = "equipe4Admin"; //nome de usuario
 $pwd = "senha123*"; //senha de acesso
 //Conecta com o bd
 $dbh = new PDO("sqlsrv:server = tcp:equipe4servidor.database.windows.net,1433; Database = equipe4database", $user, $pwd);
-$dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-catch ( PDOException $e ) {
-    print( "Error connecting to SQL Server." );
-    die(print_r($e));
-}
 ?>
 <div class="container">
     <div class="row">
