@@ -65,7 +65,7 @@
 <div id="espaco"></div>
 <div id="footer">
     <div class="container">
-        <p class="muted credit" align="center">Lucas Nascimento Cabral e Páblo Victor Félix dos Santos - Capacitaçã Huawei - Módulo 3 </p>
+        <p class="muted credit" align="center">Lucas Nascimento Cabral e Páblo Victor Félix dos Santos - Capacitaçã Huawei - Módulo Azure </p>
     </div>
 </div>
 </html>
